@@ -14,8 +14,10 @@ public class MoveListener implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
+
+        // If the moving player is protected, then bounce the nearby players to the opposite direction.
         if(plugin.isProtectedPlayer(event.getPlayer())){
-            event.getPlayer().getNearbyEntities(2,2,2).forEach(entity -> {
+            event.getPlayer().getNearbyEntities(3,3,3).forEach(entity -> {
                 if(entity instanceof Player player){
                     if(!player.hasPermission("bounce.bypass")){
                         player.setVelocity(player.getLocation().getDirection().multiply(-1).setY(0));
@@ -27,7 +29,9 @@ public class MoveListener implements Listener {
         if(event.getPlayer().hasPermission("bounce.bypass")) {
             return;
         }
-        event.getTo().getNearbyEntities(2,2,2).stream().
+
+        // If an player moves to a protected player, then bounce the moving player
+        event.getTo().getNearbyEntities(3,3,3).stream().
             filter(e -> {
                 if (e instanceof Player player) {
                     if(!player.hasPermission("bounce.bypass")){
